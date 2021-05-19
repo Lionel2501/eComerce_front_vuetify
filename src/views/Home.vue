@@ -2,6 +2,14 @@
   <v-card outlined>
     <v-card-title>
       Catalogo de productos
+    <v-spacer></v-spacer>
+    <v-btn
+      color="green"
+      text
+      class="mt-4"
+      @click="openForm"
+    >Nuevo producto
+    </v-btn>
     </v-card-title>
     <v-card-text>
     <v-row>
@@ -15,12 +23,12 @@
       </v-col>
       <v-col cols="2" md="2" sm="6">
         <v-btn
+        outlined
           color="green"
           text
           class="mt-4"
-          outlined
-          @click="openForm"
-        >Nuevo producto</v-btn>
+        >Buscar
+        </v-btn>
       </v-col>
     </v-row>
     <v-row style="margin-top: -25px">

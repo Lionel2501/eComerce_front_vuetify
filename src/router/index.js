@@ -3,6 +3,12 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import ProductoForm from '../views/ProductoForm.vue'
 
+//axios
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
+
 Vue.use(VueRouter)
 
 const routes = [

@@ -5,6 +5,7 @@
         max-width="300"
     >
         <v-img
+        @click="dialogImagen = !dialogImagen"
         height="150"
         src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
         ></v-img>
@@ -70,17 +71,31 @@
             Eliminar
         </v-btn>
         </v-card-actions>
+
+        <v-dialog 
+          max-width="500px"
+          v-model="dialogImagen">
+        <drop-image
+          @salir="dialogImagen = false"
+          @click="dialog = !dialog">
+        </drop-image>
+        </v-dialog>
     </v-card>
     </div>
 </template>
 
 <script>
+import DropImage from './DropImage.vue';
   export default {
+  components: { DropImage },
     name: 'producto',
     methods:{
         openEdit(){
             this.$router.push({name:'ProductoForm'});
-        }
-    }
+        },
+    }, 
+    data:() => ({
+        dialogImagen:false
+    })
   }
 </script>
