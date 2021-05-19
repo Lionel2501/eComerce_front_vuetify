@@ -59,6 +59,7 @@
         <v-btn
             color="green"
             text
+            @click="openEdit"
         >
             Editar
         </v-btn>
@@ -76,5 +77,10 @@
 <script>
   export default {
     name: 'producto',
+    methods:{
+        openEdit(){
+            this.$router.push({name:'ProductoForm'});
+        }
+    }
   }
 </script>

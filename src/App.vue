@@ -12,8 +12,7 @@
       <v-spacer></v-spacer>
 
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
+        @click="dialog = !dialog"
         text
       >
         <span class="mr-2">Login</span>
@@ -34,16 +33,34 @@
         <router-view/>
       </v-container>
     </v-main>
+
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+      >
+    <login
+      @salir="salir"
+    ></login>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
+import Login from './components/Login';
 
 export default {
   name: 'App',
+  components: {Login},
 
   data: () => ({
-    //
+    dialog:false
   }),
+  methods:{
+    salir(){
+        this.dialog = false
+    }
+  }
+
+  
 };
 </script>

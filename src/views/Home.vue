@@ -19,6 +19,7 @@
           text
           class="mt-4"
           outlined
+          @click="openForm"
         >Nuevo producto</v-btn>
       </v-col>
     </v-row>
@@ -29,6 +30,7 @@
     </v-row>
     </v-card-text>
     <v-divider/>
+    
   </v-card>
 </template>
 
@@ -46,7 +48,13 @@
         {id:3},
         {id:4},
         {id:5}
-      ]
-    })
+      ],
+    
+    }),
+    methods:{
+      openForm(){
+        this.$router.push({name:'ProductoForm'});
+      }
+    }
   }
 </script>
