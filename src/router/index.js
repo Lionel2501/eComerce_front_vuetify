@@ -29,6 +29,11 @@ const routes = [
     name: 'ProductoForm',
     component: ProductoForm
   },
+  {
+    path: '/producto/:id/edit',
+    name: 'EditForm',
+    component: ProductoForm
+  },
 ]
 
 const router = new VueRouter({

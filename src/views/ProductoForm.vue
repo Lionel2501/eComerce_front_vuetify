@@ -1,7 +1,13 @@
 <template>
-    <v-card outlined>
+    <v-card outlined :loading="loading">
+        <v-form
+            @submit.prevent="save"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+        >
         <v-card-title>
-            <h3>Nuevo / Editar producto</h3>
+            <h3>{{ isNew ? 'Nuevo' : 'Editar'}} producto</h3>
             <v-spacer></v-spacer>
             <v-btn
                 outlined
@@ -12,91 +18,110 @@
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
-            <v-form
-                ref="form"
-                v-model="valid"
-                lazy-validation
-            >
-                <v-text-field
-                    v-model="codigo"
-                    :counter="10"
-                    label="Codigo"
-                    type="number"
-                    required
-                ></v-text-field>
-
-                <v-text-field
-                    v-model="nombre"
-                    label="Nombre"
-                    required
-                ></v-text-field>
-
-                <v-textarea
-                    label="Descripcion"
-                    required
-                ></v-textarea>
-
-                <v-text-field
-                    label="Precio"
-                    type="number"
-                    required
-                ></v-text-field>
-
-                <v-select
-                v-model="select"
-                :items="items"
-                :rules="[v => !!v || 'Item is required']"
-                label="Item"
+            <v-text-field
+                v-model="product.codigo"
+                :counter="10"
+                label="Codigo"
+                type="number"
                 required
-                ></v-select>
+                :rules="[
+                    (v) => !! v || 'Codigo es requerido',
+                    v => (v && v.lenght >= 3 && v.lenght <= 5) || 'El codigo debe tener entre 3 y 5 carcater'
+                ]"
+            ></v-text-field>
+            
+            <v-text-field
+                v-model="product.nombre"
+                label="Nombre"
+                
+            ></v-text-field>
 
-                <v-checkbox
-                v-model="checkbox"
-                :rules="[v => !!v || 'You must agree to continue!']"
-                label="Do you agree?"
-                required
-                ></v-checkbox>
+            <v-textarea
+                v-model="product.descripcion"
+                label="Descripcion"
+                
+            ></v-textarea>
 
-                <v-btn
-                :disabled="!valid"
-                color="success"
-                class="mr-4"
-                @click="validate"
-                >
-                Validate
-                </v-btn>
-
-                <v-btn
-                color="error"
-                class="mr-4"
-                @click="reset"
-                >
-                Reset Form
-                </v-btn>
-
-                <v-btn
-                color="warning"
-                @click="resetValidation"
-                >
-                Reset Validation
-                </v-btn>
-            </v-form>
+            <v-text-field
+                v-model="product.precio"
+                label="Precio"
+                type="number"
+                
+            ></v-text-field>               
         </v-card-text>
         <v-card-actions>
+            <v-spacer></v-spacer>
+
             <v-btn
-            outlined
+                outlined
                 color="green"
-                @click="openEdit"
+                type="submit"
             >
                 Guardar
             </v-btn>
         </v-card-actions>
+        <pre>
+            {{ product }}
+        </pre>
+    </v-form>
     </v-card>
 </template>
 
 <script>
+  import { mapState } from "vuex";
+
   export default {
     name: 'producto-form',
+    data: () => ({
+        isNew: true,
+        product: {
+            user:{}
+        },
+        loading: false
+    }),
+    created(){
+        this.isNew = !this.$route.params.id
+    },
+    mounted(){
+        if(!this.isNew){
+            this.getProducto();
+        }
+    },
+    computed:{
+      ...mapState(['url'])
+    },
+    methods:{
+        getProducto(){
+        const url = this.url + "productos/" + this.$route.params.id;
+        console.log(url)
+            this.axios.get(url).then(response => {
+            console.log(response.data)
+            this.product = response.data;
+            })
+        },
+        save(){
+            if(!this.$refs.form.validate())
+                return;
+                
+            let url = "";
+
+            if(!this.isNew){
+                url = this.url + "productos/" + this.$route.params.id;
+                this.axios.put(url).then(response => {
+                    if(response.data.res == true){
+                        console.log(response)
+                        this.$toastr.success(response.data.message)
+                    } else {
+                        this.$toastr.error(response.data.message)
+                    }
+                })
+            }else {
+                url = this.url + "productos";
+                this.axios.post(url);
+            } 
+            
+        }        
+    }
   }
 </script>
 
